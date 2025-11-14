@@ -1,0 +1,6 @@
+---
+- name: Ajouter l'utilisateur Ansible au groupe sudo
+  ansible.builtin.user:
+    name: '{{ ansible_user_name }}'
+    groups: sudo
+    append: true

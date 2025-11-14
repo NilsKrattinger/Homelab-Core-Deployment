@@ -1,0 +1,9 @@
+users:
+  - name: "admin-infra"
+    ssh_key_path: "~/.ssh/<your_key>.pub"
+  - name: "Nils-local"
+    ssh_key_path: "~/.ssh/<your_key>.pub"
+
+timesync_timezone: "Europe/Paris"
+locale_LANG: "en_US.UTF-8"
+locale_LC_ALL: "en_US.UTF-8"

@@ -1,0 +1,7 @@
+---
+- name: Ansible user creation
+  ansible.builtin.include_tasks: user.yaml
+- name: Ansible user group edition
+  ansible.builtin.include_tasks: groups.yaml
+- name: Ansible user ssh config
+  ansible.builtin.include_tasks: ssh.yaml

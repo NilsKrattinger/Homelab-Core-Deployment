@@ -1,0 +1,10 @@
+---
+- name: Store Token in Ansible Vault
+  become: false
+  ansible.builtin.lineinfile:
+    path: "{{ terraform_vault_file }}"
+    line: "{{ (new_token.stdout | from_json)['full-tokenid'] }}={{ (new_token.stdout | from_json)['values'] }}"
+    create: true
+    mode: "600"
+  delegate_to: localhost
+  when: new_token.changed

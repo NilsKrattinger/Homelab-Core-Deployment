@@ -1,0 +1,12 @@
+---
+- name: Deploy sudo configuration for ansible user
+  ansible.builtin.template:
+    src: sudoers.j2
+    dest: /etc/sudoers.d/{{ sudo_ansible_user_name }}
+    mode: '0440'
+    owner: root
+    group: root
+    validate: /usr/sbin/visudo -cf %s
+  register: sudoers_file  # Register the result of the template task
+  notify:
+    - Restart sshd  # Notify handler to restart SSH only when changes happen

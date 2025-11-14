@@ -1,0 +1,6 @@
+---
+- name: Apply network changes
+  become: true
+  ansible.builtin.command: /usr/sbin/ifreload -a
+  register: ifreload
+  changed_when: ifreload.rc == 0

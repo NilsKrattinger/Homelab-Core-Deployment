@@ -1,0 +1,5 @@
+---
+- name: Setup interfaces
+  ansible.builtin.import_tasks: config_interfaces.yaml
+- name: Setup DNS
+  ansible.builtin.import_tasks: config_dns.yaml

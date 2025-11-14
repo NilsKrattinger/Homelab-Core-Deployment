@@ -1,0 +1,20 @@
+---
+- name: Get API Tokens list
+  ansible.builtin.command:
+    cmd: "pveum user token list {{ terraform_user_name }}@pve --output-format json"
+  register: token_list
+  changed_when: false
+  no_log: true
+  become: true
+
+- name: Create Terraform API Token if not exists
+  ansible.builtin.command:
+    cmd: >
+      pveum user token add "{{ terraform_user_name }}@pve" terraform
+      -expire 0 -privsep 0 -comment 'Terraform token' --output-format json
+  register: new_token
+  changed_when: new_token.rc == 0
+  when: "'terraform' not in (token_list.stdout | from_json | map(attribute='tokenid') | list)"
+  no_log: false  # Hide token in logs
+  become: true
+  notify: Store Token in Ansible Vault

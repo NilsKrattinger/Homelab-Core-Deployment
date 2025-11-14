@@ -1,0 +1,11 @@
+---
+- name: Ensure required lines in /etc/modules
+  ansible.builtin.lineinfile:
+    path: /etc/modules
+    line: '{{ pve_bootstrap_iommu_item }}'
+    insertafter: EOF
+    regexp: ^{{ pve_bootstrap_iommu_item }}$
+  loop: [vfio, vfio_iommu_type1, vfio_pci, vfio_virqfd]
+  loop_control:
+    loop_var: pve_bootstrap_iommu_item
+  register: modules_result

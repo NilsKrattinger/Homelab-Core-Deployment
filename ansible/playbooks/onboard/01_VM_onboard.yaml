@@ -1,0 +1,84 @@
+---
+- name: Onboard all VMs
+  hosts: vm_hosts
+  become: yes
+  vars:
+    # host-specific values are automatically taken from inventory if set
+    permit_root: "{{ sshd_permit_root_login | default(false) }}"
+
+  pre_tasks:
+    - name: Ensure apt cache is up to date
+      ansible.builtin.apt:
+        update_cache: yes
+
+  roles:
+    - devsec.hardening.os_hardening
+    - devsec.hardening.ssh_hardening
+
+  tasks:
+    - name: Create users and add them to sudoers
+      ansible.builtin.user:
+        name: "{{ item.name }}"
+        shell: /bin/bash
+        create_home: yes
+        groups: sudo
+        append: yes
+      loop: "{{ users }}"
+
+    - name: Add SSH keys for users
+      ansible.posix.authorized_key:
+        user: "{{ item.name }}"
+        key: "{{ lookup('file', item.ssh_key_path) }}"
+        state: present
+      loop: "{{ users }}"
+
+    - name: Install Fail2ban
+      ansible.builtin.apt:
+        name: fail2ban
+        state: present
+        update_cache: yes
+
+    - name: Ensure Fail2ban service is enabled and started
+      ansible.builtin.systemd:
+        name: fail2ban
+        state: started
+        enabled: yes
+
+    - name: Configure Fail2ban default settings
+      ansible.builtin.copy:
+        dest: /etc/fail2ban/jail.local
+        content: |
+          [sshd]
+          enabled = true
+          port = ssh
+          filter = sshd
+          logpath = /var/log/auth.log
+          maxretry = 5
+
+    - name: Install unattended-upgrades
+      ansible.builtin.apt:
+        name: unattended-upgrades
+        state: present
+        update_cache: yes
+
+    - name: Enable automatic updates
+      ansible.builtin.copy:
+        dest: /etc/apt/apt.conf.d/20auto-upgrades
+        content: |
+          APT::Periodic::Update-Package-Lists "1";
+          APT::Periodic::Unattended-Upgrade "1";
+
+    - name: Apply host-specific SSH root login setting
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^PermitRootLogin'
+        line: "PermitRootLogin {{ 'yes' if permit_root else 'no' }}"
+        state: present
+      notify:
+        - Restart SSH
+
+  handlers:
+    - name: Restart SSH
+      ansible.builtin.systemd:
+        name: ssh
+        state: restarted

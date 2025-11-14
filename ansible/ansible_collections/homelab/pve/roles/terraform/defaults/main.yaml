@@ -1,0 +1,5 @@
+---
+terraform_user_name: terraform
+terraform_role_name: terraform
+terraform_vault_file: "../../vaults/proxmox_tokens.yml"
+terraform_token_key: "proxmox_tokens.{{ inventory_hostname }}"

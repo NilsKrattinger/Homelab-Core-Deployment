@@ -1,0 +1,11 @@
+---
+- name: Setup interfaces configuration
+  become: true
+  ansible.builtin.template:
+    src: "{{ 'interface_router.j2' if 'pve_router' in group_names else 'interface_standard.j2' }}"
+    dest: /etc/network/interfaces
+    owner: root
+    group: root
+    mode: '0644'
+    backup: false
+  notify: Apply network changes

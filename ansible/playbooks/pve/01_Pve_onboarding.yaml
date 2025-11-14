@@ -1,0 +1,12 @@
+---
+- name: Pve Initial config
+  hosts: pve_hosts
+  vars:
+    ansible_user: root
+    ansible_user_name: ansible
+  vars_files:
+    - ./../../../vaults/ansible_user.yaml  # Reference the encrypted vault file
+  roles: [homelab.pve.ansible_user, homelab.pve.sudo]
+  collections:
+    - homelab.pve
+

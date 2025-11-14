@@ -1,0 +1,10 @@
+---
+- name: Set GRUB_CMDLINE_LINUX_DEFAULT parameter
+  become: true
+  become_user: root
+  ansible.builtin.lineinfile:
+    path: /etc/default/grub
+    regexp: ^GRUB_CMDLINE_LINUX_DEFAULT=(?:"[^"]*"|[^\s]*)
+    line: "{{ 'GRUB_CMDLINE_LINUX_DEFAULT=\"quiet \"' }}"
+    backup: true
+  notify: Reboot host to enable pcie pass-through

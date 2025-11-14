@@ -1,0 +1,5 @@
+# Contenu de sudoers.conf
+{{ sudo_ansible_user_name }} ALL=(ALL) NOPASSWD: /usr/bin/pvesh, /usr/bin/systemctl, /usr/bin/iptables, /usr/sbin/ufw, /bin/hostname, /usr/bin/apt-get, /usr/bin/dpkg, /usr/bin/cp, /bin/mv, /bin/rm
+{{ sudo_ansible_user_name }} ALL=(ALL) NOPASSWD: /bin/systemctl restart pvedaemon, /bin/systemctl restart pve-cluster, /bin/systemctl restart pve-storage, /bin/systemctl restart pve-manager
+{{ sudo_ansible_user_name }} ALL=(ALL) NOPASSWD: /usr/bin/pveum, /usr/bin/pvectl, /usr/bin/pvesh, /usr/sbin/vzdump
+{{ sudo_ansible_user_name }} ALL=(ALL) NOPASSWD: /bin/journalctl -u pvedaemon, /bin/journalctl -u pve-cluster, /bin/journalctl -u pve-manager

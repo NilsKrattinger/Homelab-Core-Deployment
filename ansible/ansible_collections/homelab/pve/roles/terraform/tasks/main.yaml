@@ -1,0 +1,9 @@
+---
+- name: Terraform user creation
+  ansible.builtin.include_tasks: user.yaml
+- name: Terraform role creation
+  ansible.builtin.include_tasks: roles.yaml
+- name: Terraform role assign
+  ansible.builtin.include_tasks: assign_role.yaml
+- name: Terrafrom token
+  ansible.builtin.include_tasks: make_token.yaml

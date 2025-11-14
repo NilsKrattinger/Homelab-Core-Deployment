@@ -1,0 +1,5 @@
+---
+- name: Configure Grub for PCIE Pass through
+  ansible.builtin.import_tasks: grub.yaml
+- name: Configure Kernel module for PCIE Pass through
+  ansible.builtin.import_tasks: modules.yaml

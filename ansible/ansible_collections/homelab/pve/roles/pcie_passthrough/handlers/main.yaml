@@ -1,0 +1,8 @@
+---
+- name: Reboot host to enable pcie pass-through
+  changed_when: true
+  notify: _reboot host
+  when: pve_pcie_reboot_for_kernel
+- name: _reboot host
+  ansible.builtin.reboot:
+    reboot_timeout: 900

@@ -1,0 +1,11 @@
+---
+- name: Restart pveproxy for free tier warning
+  ansible.builtin.debug:
+    msg: Restart service pveproxy for free tier warning
+  changed_when: true
+  notify: _restart PVE Proxy
+- name: _restart PVE Proxy
+  become: true
+  ansible.builtin.service:
+    name: pveproxy
+    state: restarted

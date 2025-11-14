@@ -1,0 +1,15 @@
+---
+- name: Get existing Proxmox users
+  become: true
+  ansible.builtin.command: "pveum user list --output-format json"
+  register: pve_users
+  changed_when: false
+
+- name: Create Proxmox user if not exists
+  become: true
+  ansible.builtin.command:
+    cmd: "pveum user add {{ terraform_user_name }}@pve --password {{ terraform_user_password }}"
+  when: "'{}@pve'.format(terraform_user_name) not in (pve_users.stdout | from_json | map(attribute='userid') | list)"
+  no_log: false
+  register: output
+  changed_when: output.rc == 0

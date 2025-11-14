@@ -1,0 +1,19 @@
+---
+- name: Get existing Proxmox roles
+  become: true
+  ansible.builtin.command: "pveum role list --output-format json"
+  register: pve_roles
+  changed_when: false
+
+- name: Create Terraform role
+  become: true
+  ansible.builtin.command:
+    cmd: >-
+      pveum role add {{ terraform_role_name }}
+      -privs "Datastore.Allocate Datastore.AllocateSpace Datastore.Audit Pool.Allocate
+      Sys.Audit Sys.Console Sys.Modify VM.Allocate VM.Audit VM.Clone VM.Config.CDROM
+      VM.Config.Cloudinit VM.Config.CPU VM.Config.Disk VM.Config.HWType VM.Config.Memory
+      VM.Config.Network VM.Config.Options VM.Console VM.Migrate VM.Monitor VM.PowerMgmt SDN.Use"
+  when: " terraform_role_name not in (pve_roles.stdout | from_json | map(attribute='roleid') | list)"
+  register: output
+  changed_when: output.rc != 0

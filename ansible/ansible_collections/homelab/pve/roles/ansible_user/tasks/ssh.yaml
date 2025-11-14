@@ -1,0 +1,15 @@
+---
+- name: Créer le répertoire .ssh pour l'utilisateur Ansible
+  ansible.builtin.file:
+    path: /home/{{ ansible_user_name }}/.ssh
+    state: directory
+    owner: '{{ ansible_user_name }}'
+    group: '{{ ansible_user_name }}'
+    mode: '0700'
+- name: Copier la clé publique SSH pour l'utilisateur Ansible
+  ansible.builtin.copy:
+    src: authorized_keys
+    dest: /home/{{ ansible_user_name }}/.ssh/authorized_keys
+    owner: '{{ ansible_user_name }}'
+    group: '{{ ansible_user_name }}'
+    mode: '0600'

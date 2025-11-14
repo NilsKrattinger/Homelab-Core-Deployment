@@ -1,0 +1,9 @@
+---
+- name: Remove no subscription prompt
+  become: true
+  ansible.builtin.replace:
+    path: /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js
+    regexp: data\.status\.toLowerCase\(\) !== 'active'
+    replace: 'false'
+    backup: true
+  notify: Restart pveproxy for free tier warning

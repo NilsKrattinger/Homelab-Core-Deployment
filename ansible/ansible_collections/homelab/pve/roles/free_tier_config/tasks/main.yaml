@@ -1,0 +1,5 @@
+---
+- name: Switch to community repo
+  ansible.builtin.import_tasks: switch_to_community.yaml
+- name: Disable Proxmox Subscription prompt
+  ansible.builtin.import_tasks: disable_subscription_prompt.yaml

@@ -1,6 +1,5 @@
 /.idea/
 /terraform/terraform.tfvars
-/terraform/terraform.tfvars
-/terraform/terraform.tfvars
 /terraform/.terraform/
 /terraform/terraform.tfstate
+/ansible/inventory/group_vars/vm_hosts.yml

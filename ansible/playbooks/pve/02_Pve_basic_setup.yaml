@@ -1,0 +1,15 @@
+---
+- name: Pve Initial config
+  hosts: pve_dev
+  user: ansible
+  vars_files:
+    - ./../../../vaults/ansible_user.yaml
+  vars:
+    ansible_become_password: '{{ ansible_user_password }}'
+  collections:
+    - homelab
+  roles:
+    - network
+    - free_tier_config
+    - update
+    - terraform

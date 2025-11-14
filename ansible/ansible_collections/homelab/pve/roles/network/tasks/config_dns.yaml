@@ -1,0 +1,10 @@
+---
+- name: Setup DNS with resolv.conf
+  become: true
+  ansible.builtin.copy:
+    src: resolv.conf
+    dest: /etc/resolv.conf
+    owner: root
+    group: root
+    mode: '0644'
+    backup: false
